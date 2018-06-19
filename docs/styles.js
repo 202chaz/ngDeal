@@ -539,7 +539,7 @@ if(false) {}
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /Users/ChazO/Sites/ng-deal/src/styles.css */"./src/styles.css");
+module.exports = __webpack_require__(/*! /Users/chazhaskins/Sites/ngDeal/src/styles.css */"./src/styles.css");
 
 
 /***/ })

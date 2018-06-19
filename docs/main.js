@@ -30,7 +30,7 @@ webpackEmptyAsyncContext.id = "./src/$$_lazy_route_resource lazy recursive";
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".navbar {\n  background:#0046be;\n}\n.product-description {\n  min-width:727px;\n}\n.product-image {\n  min-width:141px;\n  max-width:141px;\n  max-height:138px;\n}"
+module.exports = ".regular-price {\n  text-decoration: line-through;\n  color:#eaeaea;\n}\n.savings-label {\n  background-color:#bb0628;\n  color:#fff;\n}\n.timer {\n  background-color: #1d252c;\n  color: #fff;\n  display: block;\n  font-size: 30px;\n  width: 50px;\n  border-radius: 4px;\n  font-weight: 500;\n  padding-left:7px;\n}\n.timer-text {\n  width: 55px;\n  font-size: 11px;\n  letter-spacing: 0;\n  margin: 2px -5px;\n  text-transform: uppercase;\n}\n.timesep {\n  font-size: 35px;\n  font-weight: 500;\n}\n.navbar {\n  background:#0046be;\n}\n.product-description {\n  min-width:727px;\n}\n.product-image {\n  min-width:141px;\n  max-width:141px;\n  max-height:138px;\n}"
 
 /***/ }),
 
@@ -41,7 +41,7 @@ module.exports = ".navbar {\n  background:#0046be;\n}\n.product-description {\n 
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<nav class=\"navbar\">\n  <div class=\"container\">\n  <a class=\"navbar-brand\" href=\"#\">\n    <img src=\"./assets/logo.png\" width=\"170\" height=\"100\" alt=\"\">\n  </a>\n  </div>\n</nav>\n\n<div class=\"container\">\n  <ul class=\"list-group list-group-flush\">\n    <li class=\"list-group-item\" *ngFor=\"let product of products?.products\">\n      <div class=\"row\">\n        <div class=\"col-xs-2\">\n         <img src='{{product.image}}' class=\"product-image\">\n        </div>\n        <div class=\"col-xs-3 product-description\">\n          <h5 class=\"ml-4\">{{product.name}}</h5>\n        </div>\n        <div class=\"col-xs-3 pl-5\">\n          <h5>${{product.salePrice}}</h5>\n        </div>\n      </div>\n    </li>\n  </ul>\n</div>\n  \n\n\n\n"
+module.exports = "<nav class=\"navbar\">\n  <div class=\"container\">\n  <a class=\"navbar-brand\" href=\"#\">\n    <img src=\"./assets/logo.png\" width=\"170\" height=\"100\" alt=\"\">\n  </a>\n  <input type=\"text\" class=\"form-control col-3\" [(ngModel)]=\"searchText\" aria-label=\"Filter by product title\" placeholder=\"Enter product name to filter\">\n  </div>\n</nav>\n\n<div class=\"col-12\">\n  <div class=\"container\">\n    <ul class=\"nav justify-content-end mt-4 mb-3\">\n      <h1 class=\"text-uppercase pr-5\">Time Left</h1>\n      <li class=\"nav-item\">\n        <span class=\"timer\" id=\"hours\"></span>\n        <p class=\"timer-text text-center pl-1\">Hours</p>\n      </li>\n      <li class=\"timesep ml-1 mr-1\">:</li>\n      <li class=\"nav-item\">\n        <span class=\"timer\" id=\"minutes\"></span>\n        <p class=\"timer-text text-center pl-1\">Minutes</p>\n      </li>\n      <li class=\"timesep ml-1 mr-1\">:</li>\n      <li class=\"nav-item\">\n        <span class=\"timer\" id=\"seconds\"></span>\n        <p class=\"timer-text text-center pl-1\">Seconds</p>\n      </li>\n    </ul>\n  </div>\n</div>\n\n<div class=\"container\">\n  <ul class=\"list-group list-group-flush\">\n    <li class=\"list-group-item\" *ngFor=\"let product of products?.products | productFilter : searchText\">\n      <div class=\"row\">\n        <div class=\"col-xs-2 col-md-2\">\n         <img src='{{product.image}}' class=\"product-image\">\n        </div>\n        <div class=\"col-sm-4 product-description d-inline-block\">\n          <h5 class=\"ml-4\"><a [attr.href]=\"product.url\">{{product.name}}</a></h5>\n        </div>\n        <div class=\"col-xs-3 pl-5\">\n          <div class=\"row\">\n            <h5 class=\"ml-1 regular-price\">${{product.regularPrice}}</h5> <h5 class=\"ml-1\">${{product.salePrice}}</h5>\n          </div>\n          <h6 class=\"savings-label pl-1 pr-1\">Save ${{product.dollarSavings}}</h6>\n        </div>\n      </div>\n    </li>\n  </ul>\n</div>\n  \n\n\n\n"
 
 /***/ }),
 
@@ -74,11 +74,25 @@ var AppComponent = /** @class */ (function () {
     }
     AppComponent.prototype.ngOnInit = function () {
         this.getProducts();
+        this.setCountdown();
     };
     AppComponent.prototype.getProducts = function () {
         var _this = this;
         this.productsService.getProducts()
             .subscribe(function (products) { return _this.products = products; });
+    };
+    AppComponent.prototype.setCountdown = function () {
+        var end = new Date().setHours(23, 59, 59, 999);
+        setInterval(function () {
+            var now = new Date().getTime();
+            var distance = end - now;
+            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60) + 1);
+            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            document.getElementById('hours').innerHTML = hours.toString();
+            document.getElementById('minutes').innerHTML = minutes.toString();
+            document.getElementById('seconds').innerHTML = seconds.toString();
+        }, 1000);
     };
     AppComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
@@ -108,7 +122,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm5/platform-browser.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
-/* harmony import */ var _app_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./app.component */ "./src/app/app.component.ts");
+/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
+/* harmony import */ var _app_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./app.component */ "./src/app/app.component.ts");
+/* harmony import */ var _product_filter_pipe__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./product-filter.pipe */ "./src/app/product-filter.pipe.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -119,20 +135,24 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 
 
 
+
+
 var AppModule = /** @class */ (function () {
     function AppModule() {
     }
     AppModule = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
             declarations: [
-                _app_component__WEBPACK_IMPORTED_MODULE_3__["AppComponent"]
+                _app_component__WEBPACK_IMPORTED_MODULE_4__["AppComponent"],
+                _product_filter_pipe__WEBPACK_IMPORTED_MODULE_5__["ProductFilterPipe"]
             ],
             imports: [
                 _angular_platform_browser__WEBPACK_IMPORTED_MODULE_0__["BrowserModule"],
-                _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClientModule"]
+                _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClientModule"],
+                _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormsModule"]
             ],
             providers: [],
-            bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_3__["AppComponent"]]
+            bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_4__["AppComponent"]]
         })
     ], AppModule);
     return AppModule;
@@ -174,6 +194,49 @@ var MessageService = /** @class */ (function () {
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])({ providedIn: 'root' })
     ], MessageService);
     return MessageService;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/product-filter.pipe.ts":
+/*!****************************************!*\
+  !*** ./src/app/product-filter.pipe.ts ***!
+  \****************************************/
+/*! exports provided: ProductFilterPipe */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ProductFilterPipe", function() { return ProductFilterPipe; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+var ProductFilterPipe = /** @class */ (function () {
+    function ProductFilterPipe() {
+    }
+    ProductFilterPipe.prototype.transform = function (products, searchText) {
+        if (!products)
+            return [];
+        if (!searchText)
+            return products;
+        searchText = searchText.toLowerCase();
+        return products.filter(function (product) {
+            return product.name.toLowerCase().includes(searchText);
+        });
+    };
+    ProductFilterPipe = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Pipe"])({
+            name: 'productFilter'
+        })
+    ], ProductFilterPipe);
+    return ProductFilterPipe;
 }());
 
 
@@ -316,7 +379,7 @@ Object(_angular_platform_browser_dynamic__WEBPACK_IMPORTED_MODULE_1__["platformB
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /Users/ChazO/Sites/ng-deal/src/main.ts */"./src/main.ts");
+module.exports = __webpack_require__(/*! /Users/chazhaskins/Sites/ngDeal/src/main.ts */"./src/main.ts");
 
 
 /***/ })
